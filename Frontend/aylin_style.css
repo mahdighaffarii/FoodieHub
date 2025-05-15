@@ -1,0 +1,108 @@
+:root {
+  --yellow: #EBA83A;
+  --red: #BB371A;
+  --cream: #FFF8D9;
+  --green: #D5DBB3;
+  --Lcream: #fff8d9e6;
+  --Lgreen: #d5dbb3b6;
+}
+
+::selection {
+  background: #bb371a45;
+}
+* {
+  box-sizing: border-box;
+  font-family: 'Vazirmatn', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--Lgreen);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.login-container {
+  background-color: var(--cream);
+  padding: 2.5rem;
+  border-radius: 2rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 400px;
+  transition: transform 0.3s ease;
+}
+
+
+.login-container:hover {
+  transform: translateY(-5px);
+}
+
+.login-container h2 {
+  color: var(--red);
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--red);
+  font-weight: 600;
+}
+
+
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--green);
+  border-radius: 0.75rem;
+  background-color: #fdfdfd;
+  transition: box-shadow 0.3s;
+}
+
+input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(235, 168, 58, 0.3);
+}
+
+.login-button {
+  background-color: var(--yellow);
+  color: white;
+  border: none;
+  width: 100%;
+  padding: 0.9rem;
+  border-radius: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.login-button:hover {
+  background-color: var(--red);
+  transform: scale(1.02);
+}
+
+.signup-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.signup-link a {
+  color: var(--yellow);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.logo {
+  width: 120px;
+  margin: 0 auto 1.5rem;
+  display: block;
+}
