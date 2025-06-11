@@ -17,6 +17,21 @@ class OrderCreateSerializer(serializers.ModelSerializer):
         model = Order
         fields = ['restaurant', 'items']  # کاربر خودش از request میاد، total_price محاسبه میشه
 
+class OrderItemDisplaySerializer(serializers.ModelSerializer):
+    food_name = serializers.CharField(source='food_item.name', read_only=True)
+
+    class Meta:
+        model = OrderItem
+        fields = ['food_name', 'quantity']
+
+class OrderDisplaySerializer(serializers.ModelSerializer):
+    items = OrderItemDisplaySerializer(many=True, read_only=True)
+    restaurant_name = serializers.CharField(source='restaurant.name', read_only=True)
+
+    class Meta:
+        model = Order
+        fields = ['id', 'restaurant_name', 'total_price', 'status', 'created_at', 'items']
+
     def validate(self, data):
         # محاسبه قیمت کل
         total_price = 0
