@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>منوی رستوران</title>
+  <link rel="stylesheet" href="aylin_style.css" />
+</head>
+<body>
+<header class="menu-header">
+
+  <!-- لوگو سمت راست -->
+  <img src="logo2.png" class="brand-logo" alt="Logo" />
+
+  <!-- آدرس و برند -->
+  <div class="menu-header-right">
+    <!-- می‌تونی اینجا آدرس انتخابی و متن رو هم اضافه کنی -->
+  </div>
+
+  <!-- جستجو -->
+  <div class="menu-search-box">
+    <input type="text" placeholder="جست‌وجو" />
+    <span class="search-icon"></span>
+  </div>
+
+  <!-- دکمه‌ها -->
+  <div class="menu-header-left">
+    <a href="#" class="vendor-link"> ثبت نام فروشندگان</a>
+    <button class="login-btn">ورود یا عضویت</button>
+  </div>
+
+</header>
+
+<main class="menu-container" id="menuContainer">
+  <!-- آیتم‌های منو به صورت داینامیک اضافه می‌شن -->
+</main>
+
+<script>
+  // داده‌ها از API یا سرور فرضی
+  const menuItems = [
+    {
+      name: "چلوکباب سلطانی",
+      description: "برنج ایرانی + کباب برگ و کوبیده",
+      price: 250000,
+      image: "images/kabab.jpg"
+    },
+    {
+      name: "قرمه‌سبزی",
+      description: "با گوشت گوسفندی، لوبیا قرمز و لیمو عمانی",
+      price: 140000,
+      image: "images/ghorme.jpg"
+    },
+    {
+      name: "زرشک‌پلو با مرغ",
+      description: "مرغ زعفرانی با برنج ایرانی و زرشک تازه",
+      price: 160000,
+      image: "images/zereshk.jpg"
+    }
+  ];
+
+  const container = document.getElementById("menuContainer");
+
+  menuItems.forEach(item => {
+    const card = document.createElement("div");
+    card.className = "menu-card";
+
+    card.innerHTML = `
+      <img src="${item.image}" alt="${item.name}" />
+      <div class="menu-info">
+        <h2>${item.name}</h2>
+        <p>${item.description}</p>
+        <div class="menu-actions">
+          <span class="price">${item.price.toLocaleString()} تومان</span>
+          <button class="add-btn">افزودن</button>
+        </div>
+      </div>
+    `;
+
+    container.appendChild(card);
+  });
+</script>
+</body>
+</html>
