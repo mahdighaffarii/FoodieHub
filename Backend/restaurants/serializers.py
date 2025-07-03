@@ -15,6 +15,11 @@ class FoodItemSerializer(serializers.ModelSerializer):
         model = FoodItem
         fields = ['id', 'name', 'description', 'price', 'image', 'category', 'is_available']
 
+class FoodItemCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FoodItem
+        fields = ['id', 'name', 'description', 'price', 'image', 'category', 'is_available']
+
 
 # این سریالایزر برای نمایش لیست کلی رستوران‌ها استفاده می‌شود (اطلاعات خلاصه)
 class RestaurantListSerializer(serializers.ModelSerializer):

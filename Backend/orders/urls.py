@@ -1,3 +1,4 @@
+from django.urls import path
 from .views import CreateOrderView, ListUserOrdersView, RestaurantOrdersView, UpdateOrderStatusView, OrderDetailView, CancelOrderView
 
 urlpatterns = [
