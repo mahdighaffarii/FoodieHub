@@ -74,3 +74,14 @@ class OrderDisplaySerializer(serializers.ModelSerializer):
         user.wallet.withdraw(total_price)
 
         return order
+
+class OrderStatusUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ['status']
+
+    def validate_status(self, value):
+        if value not in Order.OrderStatus.values:
+            raise serializers.ValidationError("Invalid status value")
+        return value
+
