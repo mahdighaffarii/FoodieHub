@@ -61,3 +61,24 @@ class OrderDetailView(RetrieveAPIView):
 
     def get_queryset(self):
         return Order.objects.filter(customer=self.request.user)
+
+class CancelOrderView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def patch(self, request, pk):
+        user = request.user
+        try:
+            order = Order.objects.get(pk=pk)
+        except Order.DoesNotExist:
+            return Response({"error": "Order not found"}, status=http_status.HTTP_404_NOT_FOUND)
+
+        if order.customer != user:
+            return Response({"error": "Unauthorized"}, status=http_status.HTTP_403_FORBIDDEN)
+
+        if order.status != Order.OrderStatus.PENDING:
+            return Response({"error": "Only pending orders can be canceled"}, status=http_status.HTTP_400_BAD_REQUEST)
+
+        order.status = Order.OrderStatus.CANCELED
+        order.save()
+
+        return Response({"message": "Order canceled successfully"}, status=http_status.HTTP_200_OK)
