@@ -20,3 +20,13 @@ class CreateOrderView(generics.CreateAPIView):
     def perform_create(self, serializer):
         # ارسال کاربر فعلی برای استفاده در serializer
         serializer.save()
+
+class RestaurantOrdersView(generics.ListAPIView):
+    serializer_class = OrderDisplaySerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.role != 'RESTAURANT_MANAGER':
+            return Order.objects.none()
+        return Order.objects.filter(restaurant__manager=user).order_by('-created_at')
