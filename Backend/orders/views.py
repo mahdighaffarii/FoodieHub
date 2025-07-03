@@ -7,6 +7,7 @@ from rest_framework import status as http_status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import OrderStatusUpdateSerializer
+from rest_framework.generics import RetrieveAPIView
 
 class UpdateOrderStatusView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -53,3 +54,10 @@ class RestaurantOrdersView(generics.ListAPIView):
         if user.role != 'RESTAURANT_MANAGER':
             return Order.objects.none()
         return Order.objects.filter(restaurant__manager=user).order_by('-created_at')
+
+class OrderDetailView(RetrieveAPIView):
+    serializer_class = OrderDisplaySerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return Order.objects.filter(customer=self.request.user)
