@@ -4,80 +4,80 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>منوی رستوران</title>
-  <link rel="stylesheet" href="aylin_style.css" />
+
+  <link rel="icon" type="image/x-icon" href="logo2.png">
+  <link rel="stylesheet" href="aylin_style.css">
+  <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-zN6N/1pqkj... (مخفف) ..." crossorigin="anonymous" referrerpolicy="no-referrer">
+
 </head>
+
 <body>
-<header class="menu-header">
+  <header class="menu-header">
+    <img src="logo2.png" class="brand-logo" alt="Logo" />
 
-  <!-- لوگو سمت راست -->
-  <img src="logo2.png" class="brand-logo" alt="Logo" />
+    <div class="menu-header-right"></div>
 
-  <!-- آدرس و برند -->
-  <div class="menu-header-right">
-    <!-- می‌تونی اینجا آدرس انتخابی و متن رو هم اضافه کنی -->
-  </div>
+    <div class="menu-search-box">
+      <input type="text" id="searchInput" placeholder="جست‌وجو">
+    </div>
 
-  <!-- جستجو -->
-  <div class="menu-search-box">
-    <input type="text" placeholder="جست‌وجو" />
-    <span class="search-icon"></span>
-  </div>
+    <div class="menu-header-left">
+      <a href="register.html" class="vendor-link">ثبت‌نام فروشندگان</a>
+      <button class="login-btn" onclick="window.location.href='register.html'">ورود یا عضویت</button>
+    </div>
 
-  <!-- دکمه‌ها -->
-  <div class="menu-header-left">
-    <a href="#" class="vendor-link"> ثبت نام فروشندگان</a>
-    <button class="login-btn">ورود یا عضویت</button>
-  </div>
+    
+  </header>
 
-</header>
+  <div class="page-content">
+    <aside id="categorySidebar" class="categories-sidebar">
+      <h2>دسته‌بندی</h2>
+      <ul id="categoryList">
+        
+      </ul>
+    </aside>
 
-<main class="menu-container" id="menuContainer">
-  <!-- آیتم‌های منو به صورت داینامیک اضافه می‌شن -->
-</main>
+    <main id="menuContainer" class="menu-container"></main>
 
-<script>
-  // داده‌ها از API یا سرور فرضی
-  const menuItems = [
-    {
-      name: "چلوکباب سلطانی",
-      description: "برنج ایرانی + کباب برگ و کوبیده",
-      price: 250000,
-      image: "images/kabab.jpg"
-    },
-    {
-      name: "قرمه‌سبزی",
-      description: "با گوشت گوسفندی، لوبیا قرمز و لیمو عمانی",
-      price: 140000,
-      image: "images/ghorme.jpg"
-    },
-    {
-      name: "زرشک‌پلو با مرغ",
-      description: "مرغ زعفرانی با برنج ایرانی و زرشک تازه",
-      price: 160000,
-      image: "images/zereshk.jpg"
-    }
-  ];
-
-  const container = document.getElementById("menuContainer");
-
-  menuItems.forEach(item => {
-    const card = document.createElement("div");
-    card.className = "menu-card";
-
-    card.innerHTML = `
-      <img src="${item.image}" alt="${item.name}" />
-      <div class="menu-info">
-        <h2>${item.name}</h2>
-        <p>${item.description}</p>
-        <div class="menu-actions">
-          <span class="price">${item.price.toLocaleString()} تومان</span>
-          <button class="add-btn">افزودن</button>
-        </div>
+    <aside id="cartSidebar" class="cart-sidebar">
+      <h2>سبد خرید</h2>
+      <ul id="cartItemsList"></ul>
+      <div class="cart-total">
+        مجموع: <span id="cartTotal">۰</span> تومان
+        <button class="pay-btn" onclick="window.location.href='#'">تایید سفارش و پرداخت</button>
       </div>
-    `;
+    </aside>
+  </div>
 
-    container.appendChild(card);
-  });
-</script>
+  <script src="script.js" defer></script>
 </body>
+
+<footer class="site-footer">
+  <div class="footer-container">
+
+    <div class="footer-brand">
+      <img src="logo2.png" alt="لوگو" class="footer-logo">
+      <h3>فودی‌هاب</h3>
+      <p> سفارش آنلاین غذا</p>
+
+      <ul class="social-icons">
+        <li><a href="#"><i class="fa-brands fa-twitter"></i></a></li>
+        <li><a href="#"><i class="fa-brands fa-telegram"></i></a></li>
+        <li><a href="#"><i class="fa-brands fa-linkedin-in"></i></a></li>
+        <li><a href="#"><i class="fa-brands fa-instagram"></i></a></li>
+      </ul>
+    </div>
+
+    <div class="footer-links">
+      <ul>
+        <li><a href="#">درباره اسنپ‌فود</a></li>
+        <li><a href="#">وبلاگ</a></li>
+        <li><a href="#">قوانین سایت</a></li>
+        <li><a href="register.html">ثبت‌نام فروشندگان</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
 </html>
