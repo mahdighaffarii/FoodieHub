@@ -37,3 +37,21 @@ class CreateFoodItemView(generics.CreateAPIView):
         except Restaurant.DoesNotExist:
             raise PermissionDenied("You don't have a registered restaurant.")
         serializer.save(restaurant=restaurant)
+
+class UpdateDeleteFoodItemView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = FoodItem.objects.all()
+    serializer_class = FoodItemCreateSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_update(self, serializer):
+        food = self.get_object()
+        user = self.request.user
+        if food.restaurant.manager != user:
+            raise PermissionDenied("You can only update your own food items.")
+        serializer.save()
+
+    def perform_destroy(self, instance):
+        user = self.request.user
+        if instance.restaurant.manager != user:
+            raise PermissionDenied("You can only delete your own food items.")
+        instance.delete()
