@@ -2,8 +2,9 @@
 from rest_framework import generics, permissions
 from rest_framework.permissions import AllowAny
 from .models import Restaurant, FoodItem
-from .serializers import RestaurantListSerializer, RestaurantDetailSerializer, FoodItemCreateSerializer
+from .serializers import RestaurantListSerializer, RestaurantDetailSerializer, FoodItemCreateSerializer, FoodItemSerializer
 from rest_framework.exceptions import PermissionDenied
+from django.db.models import Q
 
 
 class RestaurantListView(generics.ListAPIView):
@@ -55,3 +56,13 @@ class UpdateDeleteFoodItemView(generics.RetrieveUpdateDestroyAPIView):
         if instance.restaurant.manager != user:
             raise PermissionDenied("You can only delete your own food items.")
         instance.delete()
+
+class FoodSearchView(generics.ListAPIView):
+    serializer_class = FoodItemSerializer
+
+    def get_queryset(self):
+        query = self.request.query_params.get('q', '')
+        return FoodItem.objects.filter(
+            Q(name__icontains=query) | Q(description__icontains=query),
+            is_available=True
+        ).order_by('name')
