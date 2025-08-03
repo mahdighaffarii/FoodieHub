@@ -5,7 +5,9 @@ from .models import Restaurant, FoodItem
 from .serializers import RestaurantListSerializer, RestaurantDetailSerializer, FoodItemCreateSerializer, FoodItemSerializer
 from rest_framework.exceptions import PermissionDenied
 from django.db.models import Q
-
+from rest_framework import generics, permissions
+from .serializers import RestaurantCreateSerializer # ایمپورت سریالایزر جدید
+from .permissions import IsRestaurantManager
 
 class RestaurantListView(generics.ListAPIView):
     """
@@ -25,18 +27,20 @@ class RestaurantDetailView(generics.RetrieveAPIView):
     permission_classes = [AllowAny]
     lookup_field = 'pk'
 
+
+
 class CreateFoodItemView(generics.CreateAPIView):
     serializer_class = FoodItemCreateSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsRestaurantManager] 
 
     def perform_create(self, serializer):
         user = self.request.user
-        if user.role != 'RESTAURANT_MANAGER':
-            raise PermissionDenied("Only restaurant managers can add food.")
         try:
-            restaurant = Restaurant.objects.get(manager=user)
+            # اینجا باید از 'owner' استفاده شود، نه 'manager'
+            restaurant = Restaurant.objects.get(owner=user)
         except Restaurant.DoesNotExist:
-            raise PermissionDenied("You don't have a registered restaurant.")
+            raise PermissionDenied("شما رستورانی برای افزودن غذا ندارید. ابتدا رستوران خود را ثبت کنید.")
+        
         serializer.save(restaurant=restaurant)
 
 class UpdateDeleteFoodItemView(generics.RetrieveUpdateDestroyAPIView):
@@ -66,3 +70,17 @@ class FoodSearchView(generics.ListAPIView):
             Q(name__icontains=query) | Q(description__icontains=query),
             is_available=True
         ).order_by('name')
+        
+class CreateRestaurantView(generics.CreateAPIView):
+    """
+    API view for restaurant managers to create their own restaurant.
+    """
+    queryset = Restaurant.objects.all()
+    serializer_class = RestaurantCreateSerializer
+    # اینجا از پرمیشن سفارشی خودمان استفاده می‌کنیم
+    permission_classes = [permissions.IsAuthenticated, IsRestaurantManager]
+
+    def perform_create(self, serializer):
+        # این متد قبل از ذخیره کردن فراخوانی می‌شود
+        # ما اینجا به صورت خودکار مالک رستوران را کاربر لاگین کرده قرار می‌دهیم
+        serializer.save(owner=self.request.user)
