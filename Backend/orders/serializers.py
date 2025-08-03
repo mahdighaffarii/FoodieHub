@@ -9,14 +9,20 @@ class OrderItemSerializer(serializers.ModelSerializer):
         model = OrderItem
         fields = ['food_item', 'quantity']
 
+class OrderItemCreateSerializer(serializers.Serializer):
+    food_item_id = serializers.IntegerField()
+    quantity = serializers.IntegerField(min_value=1)
+    
+class OrderCreateSerializer(serializers.Serializer):
+    restaurant_id = serializers.IntegerField()
+    items = OrderItemCreateSerializer(many=True)
 
-class OrderCreateSerializer(serializers.ModelSerializer):
-    items = OrderItemSerializer(many=True, write_only=True)  # دریافت آیتم‌ها از فرانت
-
-    class Meta:
-        model = Order
-        fields = ['restaurant', 'items']  # کاربر خودش از request میاد، total_price محاسبه میشه
-
+    def validate_items(self, items):
+        if not items:
+            raise serializers.ValidationError("سبد خرید نمی‌تواند خالی باشد.")
+        return items
+    
+    
 class OrderItemDisplaySerializer(serializers.ModelSerializer):
     food_name = serializers.CharField(source='food_item.name', read_only=True)
 
