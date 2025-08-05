@@ -1,7 +1,5 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, status
 from .models import Order, OrderItem
-from .serializers import OrderCreateSerializer
-from .serializers import OrderDisplaySerializer
 from rest_framework import status as http_status
 from rest_framework.views import APIView
 from .serializers import OrderStatusUpdateSerializer
@@ -11,9 +9,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from restaurants.models import Restaurant, FoodItem
-from wallets.models import Wallet, Transaction # مدل Transaction را ایمپورت کنید
-from .serializers import OrderCreateSerializer, OrderDisplaySerializer # سریالایزر جدید را ایمپورت کنید
-from rest_framework import status # این خط را اضافه یا تکمیل کنید
+from wallets.models import Wallet, Transaction
+from .serializers import OrderCreateSerializer, OrderDisplaySerializer
+from datetime import date, timedelta
+from django.db.models import Sum, Count
+from django.utils.dateparse import parse_date
+
 
 class UpdateOrderStatusView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -154,3 +155,73 @@ class CancelOrderView(APIView):
         order.save()
 
         return Response({"message": "Order canceled successfully"}, status=http_status.HTTP_200_OK)
+
+class RestaurantSalesReportView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+
+        # فقط مدیر رستوران اجازه داره
+        if user.role != 'RESTAURANT_MANAGER':
+            return Response(
+                {"error": "Only restaurant managers can access this report."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        start_date = request.query_params.get('start_date')
+        end_date = request.query_params.get('end_date')
+        period = request.query_params.get('period')
+
+        today = date.today()
+
+        # حالت بازه‌های پیش‌فرض
+        if period:
+            if period == "daily":
+                start_date = today
+                end_date = today
+            elif period == "weekly":
+                start_date = today - timedelta(days=today.weekday())  # شروع هفته
+                end_date = today
+            elif period == "monthly":
+                start_date = today.replace(day=1)  # اول ماه
+                end_date = today
+            else:
+                return Response(
+                    {"error": "Invalid period. Use daily, weekly, or monthly."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+        # حالت بازه انتخابی
+        elif start_date and end_date:
+            start_date = parse_date(start_date)
+            end_date = parse_date(end_date)
+            if not start_date or not end_date:
+                return Response(
+                    {"error": "Invalid date format. Use YYYY-MM-DD."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        else:
+            return Response(
+                {"error": "Provide either period or both start_date and end_date."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # فیلتر سفارش‌ها
+        orders = Order.objects.filter(
+            restaurant__manager=user,
+            created_at__date__range=(start_date, end_date)
+        )
+
+        # محاسبه گزارش
+        report = orders.aggregate(
+            total_revenue=Sum('total_price'),
+            total_orders=Count('id')
+        )
+
+        return Response({
+            "start_date": start_date,
+            "end_date": end_date,
+            "total_revenue": report['total_revenue'] or 0,
+            "total_orders": report['total_orders'] or 0
+        })
