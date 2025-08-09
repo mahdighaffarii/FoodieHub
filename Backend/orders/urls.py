@@ -8,6 +8,6 @@ urlpatterns = [
     path('<int:pk>/update-status/', UpdateOrderStatusView.as_view(), name='update_order_status'),
     path('<int:pk>/', OrderDetailView.as_view(), name='order_detail'),
     path('<int:pk>/cancel/', CancelOrderView.as_view(), name='cancel_order'),
-    path('my/report/', RestaurantSalesReportView.as_view(), name='restaurant_sales_report'),
+    path('restaurant/report/', RestaurantSalesReportView.as_view(), name='restaurant-sales-report'),
 ]
 
