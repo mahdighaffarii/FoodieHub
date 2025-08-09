@@ -44,11 +44,15 @@ INSTALLED_APPS = [
     'accounts',
     'restaurants',
     'wallets',
-    'orders'
+    'orders',
+    'drf_spectacular',
+
+
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # <-- این خط را اضافه کنید
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -59,22 +63,25 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'FoodieHub.urls'
+# FoodieHub/settings.py
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [],
-        'APP_DIRS': True,
+        # این برای پیدا کردن قالب‌های drf-spectacular ضروری است
+        'APP_DIRS': True,  
+        # این بخش OPTIONS که خطا به آن اشاره دارد، باید کامل باشد
         'OPTIONS': {
             'context_processors': [
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request', # برای هشدار W411
+                'django.contrib.auth.context_processors.auth', # برای خطای E402
+                'django.contrib.messages.context_processors.messages', # برای خطای E404
             ],
         },
     },
 ]
-
 WSGI_APPLICATION = 'FoodieHub.wsgi.application'
 
 
@@ -130,7 +137,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -152,6 +159,31 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+# settings.py
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'FoodieHub API Project',
+    'DESCRIPTION': 'API Documentation for FoodieHub',
+    'VERSION': '1.0.0',
+    
+    # این خط اکستنشن simplejwt را فعال می‌کند
+    'SPECTACULAR_EXTENSIONS': [
+        'drf_spectacular_simplejwt.SimpleJWTScheme',
+    ],
+
+    # بقیه تنظیمات برای UI
+    'SWAGGER_UI_DIST': 'SIDECAR', 
+    'APPEND_COMPONENTS': {
+        'securitySchemes': {
+            'bearerAuth': {
+                'type': 'http',
+                'scheme': 'bearer',
+                'bearerFormat': 'JWT',
+            }
+        }
+    },
+    'SECURITY': [{'bearerAuth': []}],
 }
 # Custom User Model
 AUTH_USER_MODEL = 'accounts.User'
@@ -163,3 +195,19 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # آدرس پیش‌فرض Vue 3
+    "http://127.0.0.1:5173",
+    
+]
+
+CORS_ALLOW_HEADERS = [
+    'Authorization',
+    'Content-Type',
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'

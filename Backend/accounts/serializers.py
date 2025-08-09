@@ -22,3 +22,4 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             role=validated_data.get('role', User.Role.CUSTOMER)
         )
         return user
+    
