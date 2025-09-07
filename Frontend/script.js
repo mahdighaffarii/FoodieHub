@@ -1,41 +1,50 @@
-/* ---------- منو (۳ غذا در هر دسته) ---------- */
+/*
 const menuItems = [
-  /* 🔹 کباب‌ها */
+  // 🔹 کباب‌ها
   { id: "1",  name: "چلوکباب سلطانی",     category: "کباب‌ها", description: "کوبیده + برگ با برنج ایرانی", price: 250000, image: "images/kabab_soltani.jpg" },
   { id: "2",  name: "چلو جوجه‌کباب",      category: "کباب‌ها", description: "جوجه زعفرانی با کره",          price: 180000, image: "images/kabab_joojeh.jpg" },
   { id: "3",  name: "کباب برگ",           category: "کباب‌ها", description: "راسته گوساله گریل‌شده",        price: 270000, image: "images/kabab_barg.jpg" },
 
-  /* 🔹 خورش‌ها */
+  // 🔹 خورش‌ها
   { id: "4",  name: "قرمه‌سبزی",          category: "خورش‌ها", description: "سبزی تازه، لوبیا قرمز، گوشت",  price: 140000, image: "images/ghorme.jpg" },
   { id: "5",  name: "فسنجان",             category: "خورش‌ها", description: "گردو + رب انار، مرغ ریش‌ریش",  price: 185000, image: "images/fesenjan.jpg" },
   { id: "6",  name: "قیمه",               category: "خورش‌ها", description: "لپه، گوشت، سیب‌زمینی خلالی",   price: 135000, image: "images/gheimeh.jpg" },
 
-  /* 🔹 پلوها */
+  // 🔹 پلوها
   { id: "7",  name: "زرشک‌پلو با مرغ",    category: "پلوها",   description: "مرغ زعفرانی + زرشک تازه",     price: 160000, image: "images/zereshk.jpg" },
   { id: "8",  name: "باقالی‌پلو با گوشت", category: "پلوها",   description: "برنج + شوید و باقالی، گوشت ماهیچه", price: 220000, image: "images/baghali.jpg" },
   { id: "9",  name: "لوبیاپلو",           category: "پلوها",   description: "لوبیا سبز، گوشت چرخ‌کرده، برنج", price: 150000, image: "images/lobia.jpg" },
 
-  /* 🔹 دسرها */
+  // 🔹 دسرها
   { id: "10", name: "بستنی سنتی",         category: "دسرها",   description: "زعفران، گلاب، خلال پسته",      price: 70000,  image: "images/bastani.jpg" },
   { id: "11", name: "فالوده شیرازی",      category: "دسرها",   description: "رشته یخی، آب‌لیمو و شربت",    price: 65000,  image: "images/faloodeh.jpg" },
   { id: "12", name: "شله‌زرد",            category: "دسرها",   description: "برنج، زعفران، خلال بادام",      price: 60000,  image: "images/sholezard.jpg" }
 ];
+*/
 
 /* ---------- دسته‌ها ---------- */
+/*
 const categories = ["کباب‌ها", "خورش‌ها", "پلوها", "دسرها"];
+*/
+
 
 /* ---------- رندر دسته‌بندی ---------- */
 const categoryListElem = document.getElementById("categoryList");
-let selectedCategory = null;                     // null = همهٔ دسته‌ها
+let selectedCategory = null;   // null = همهٔ دسته‌ها
 
 function renderCategories() {
   categoryListElem.innerHTML = "";
+
+  if (typeof categories === "undefined" || !Array.isArray(categories)) {
+    return; // اگر دسته‌بندی از بک‌اند نیومده باشه، خطا نده
+  }
+
   categories.forEach(cat => {
     const li = document.createElement("li");
     li.className = "category-item" + (cat === selectedCategory ? " active" : "");
     li.textContent = cat;
     li.addEventListener("click", () => {
-      selectedCategory = selectedCategory === cat ? null : cat;   // دوباره کلیک = لغو
+      selectedCategory = selectedCategory === cat ? null : cat; // دوباره کلیک = لغو
       renderCategories();
       renderMenu();
     });
@@ -49,6 +58,10 @@ const menuContainer = document.getElementById("menuContainer");
 function renderMenu() {
   menuContainer.innerHTML = "";
   const term = document.getElementById("searchInput").value.trim();
+
+  if (typeof menuItems === "undefined" || !Array.isArray(menuItems)) {
+    return; // اگر هنوز منو نیومده، خطا نده
+  }
 
   const filtered = menuItems.filter(it =>
     (!selectedCategory || it.category === selectedCategory) &&
@@ -80,6 +93,8 @@ const cartList  = document.getElementById("cartItemsList");
 const cartTotal = document.getElementById("cartTotal");
 
 function addToCart(id) {
+  if (typeof menuItems === "undefined") return;
+
   const item = menuItems.find(i => i.id === id);
   if (!item) return;
   cart[id] ? cart[id].quantity++ : cart[id] = { ...item, quantity: 1 };

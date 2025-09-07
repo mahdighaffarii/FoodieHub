@@ -3,14 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>منوی رستوران</title>
+  <title>رستوران‌ها</title>
 
   <link rel="icon" type="image/x-icon" href="logo2.png">
   <link rel="stylesheet" href="aylin_style.css">
   <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-      integrity="sha512-zN6N/1pqkj... (مخفف) ..." crossorigin="anonymous" referrerpolicy="no-referrer">
-
+      crossorigin="anonymous" referrerpolicy="no-referrer">
 </head>
 
 <body>
@@ -20,49 +19,35 @@
     <div class="menu-header-right"></div>
 
     <div class="menu-search-box">
-      <input type="text" id="searchInput" placeholder="جست‌وجو">
+      <input type="text" id="searchInput" placeholder="جست‌وجوی رستوران">
     </div>
 
     <div class="menu-header-left">
       <a href="register.html" class="vendor-link">ثبت‌نام فروشندگان</a>
       <button class="login-btn" onclick="window.location.href='register.html'">ورود یا عضویت</button>
     </div>
-    
-
-    
   </header>
 
   <div class="page-content">
+    <!-- سایدبار دسته‌بندی -->
     <aside id="categorySidebar" class="categories-sidebar">
-      <h2>دسته‌بندی</h2>
-      <ul id="categoryList">
-        
-      </ul>
+      <h2>نوع رستوران</h2>
+      <ul id="categoryList"></ul>
     </aside>
 
-    <main id="menuContainer" class="menu-container"></main>
-
-    <aside id="cartSidebar" class="cart-sidebar">
-      <h2>سبد خرید</h2>
-      <ul id="cartItemsList"></ul>
-      <div class="cart-total">
-        مجموع: <span id="cartTotal">۰</span> تومان
-        <button class="pay-btn" onclick="window.location.href='#'">تایید سفارش و پرداخت</button>
-      </div>
-    </aside>
+    <!-- لیست رستوران‌ها -->
+    <main id="restaurantContainer" class="menu-container"></main>
   </div>
 
-  <script src="script.js" defer></script>
+  <script src="restaurants.js" defer></script>
 </body>
 
 <footer class="site-footer">
   <div class="footer-container">
-
     <div class="footer-brand">
       <img src="logo2.png" alt="لوگو" class="footer-logo">
       <h3>فودی‌هاب</h3>
-      <p> سفارش آنلاین غذا</p>
-
+      <p>سفارش آنلاین غذا</p>
       <ul class="social-icons">
         <li><a href="#"><i class="fa-brands fa-twitter"></i></a></li>
         <li><a href="#"><i class="fa-brands fa-telegram"></i></a></li>
