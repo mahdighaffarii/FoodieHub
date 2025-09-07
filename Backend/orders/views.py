@@ -28,7 +28,7 @@ class UpdateOrderStatusView(APIView):
         except Order.DoesNotExist:
             return Response({"error": "Order not found"}, status=http_status.HTTP_404_NOT_FOUND)
 
-        if user.role != 'RESTAURANT_MANAGER' or order.restaurant.manager != user:
+        if user.role != 'RESTAURANT_MANAGER' or order.restaurant.owner  != user:
             return Response({"error": "Unauthorized"}, status=http_status.HTTP_403_FORBIDDEN)
 
         serializer = OrderStatusUpdateSerializer(order, data=request.data, partial=True)
@@ -128,7 +128,7 @@ class RestaurantOrdersView(generics.ListAPIView):
         user = self.request.user
         if user.role != 'RESTAURANT_MANAGER':
             return Order.objects.none()
-        return Order.objects.filter(restaurant__manager=user).order_by('-created_at')
+        return Order.objects.filter(restaurant__owner=user).order_by('-created_at')
 
 class OrderDetailView(RetrieveAPIView):
     serializer_class = OrderDisplaySerializer

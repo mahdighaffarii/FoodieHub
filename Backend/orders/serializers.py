@@ -87,7 +87,11 @@ class OrderStatusUpdateSerializer(serializers.ModelSerializer):
         fields = ['status']
 
     def validate_status(self, value):
-        if value not in Order.OrderStatus.values:
-            raise serializers.ValidationError("Invalid status value")
+        # کد اصلاح شده:
+        # از متغیر STATUS_CHOICES در مدل Order استفاده می‌کنیم
+        valid_statuses = [choice[0] for choice in Order.STATUS_CHOICES]
+        
+        if value not in valid_statuses:
+            raise serializers.ValidationError(f"'{value}' یک وضعیت معتبر نیست. وضعیت‌های معتبر: {valid_statuses}")
+            
         return value
-
