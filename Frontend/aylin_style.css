@@ -403,8 +403,22 @@ select:focus {
 }
 .footer-links a:hover { color: var(--red); }
 
-  @media (max-width: 768px) {
-  .footer-container { flex-direction: column; text-align: center; }
-  .footer-brand, .footer-links { flex: 1 1 100%; }
-  .social-icons { justify-content: center; }
+
+.about-page {
+  max-width: 800px;     /* حداکثر عرض بخش درباره ما */
+  margin: 3rem auto;    /* وسط‌چین کردن کل بخش */
+  padding: 2rem;
+  text-align: right;    /* متن‌ها راست‌چین بمونن */
+  line-height: 1.8;     /* فاصله خطوط برای خوانایی */
+}
+
+.about-page h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  text-align: center;   /* تیتر "درباره ما" وسط‌چین بشه */
+}
+
+.about-page p {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
 }
