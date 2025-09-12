@@ -5,11 +5,15 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,    # این ویو برای تمدید توکن است
 )
 from django.conf.urls.static import static
+from .views import UserProfileView
+
 
 
 urlpatterns = [
     path('register/', RegisterView.as_view(), name='user_register'),
     path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('profile/', UserProfileView.as_view(), name='user-profile'),
+
 ]
 

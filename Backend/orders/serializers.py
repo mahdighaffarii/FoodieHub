@@ -31,12 +31,23 @@ class OrderItemDisplaySerializer(serializers.ModelSerializer):
         fields = ['food_name', 'quantity']
 
 class OrderDisplaySerializer(serializers.ModelSerializer):
-    items = OrderItemDisplaySerializer(many=True, read_only=True)
+    # این دو فیلد، فیلدهای سفارشی هستند که از مدل‌های مرتبط خوانده می‌شوند
     restaurant_name = serializers.CharField(source='restaurant.name', read_only=True)
+    customer_email = serializers.EmailField(source='customer.email', read_only=True)
+    items = OrderItemDisplaySerializer(many=True, read_only=True) # این را هم اینجا تعریف کنیم بهتر است
 
     class Meta:
         model = Order
-        fields = ['id', 'restaurant_name', 'total_price', 'status', 'created_at', 'items']
+        # حالا که فیلدهای سفارشی را بالا تعریف کردیم، می‌توانیم از آن‌ها در fields استفاده کنیم
+        fields = [
+            'id', 
+            'restaurant_name', 
+            'customer_email', # ایمیل مشتری برای نمایش در پنل مدیر
+            'total_price', 
+            'status', 
+            'created_at', 
+            'items'
+        ]
 
     def validate(self, data):
         # محاسبه قیمت کل

@@ -82,3 +82,6 @@ class OrderCreationTests(APITestCase):
         # کیف پول را دوباره از دیتابیس می‌خوانیم تا مطمئن شویم موجودی کم شده است
         self.customer_wallet.refresh_from_db()
         self.assertEqual(self.customer_wallet.balance, Decimal('700000.00'))
+
+
+

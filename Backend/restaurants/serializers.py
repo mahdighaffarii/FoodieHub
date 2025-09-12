@@ -13,7 +13,7 @@ class FoodItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FoodItem
-        fields = ['id', 'name', 'description', 'price', 'image', 'category', 'is_available']
+        fields = ['id', 'name', 'description', 'price', 'image', 'category', 'is_available', 'restaurant']
 
 # restaurants/serializers.py
 
@@ -58,3 +58,8 @@ class RestaurantCreateSerializer(serializers.ModelSerializer):
         if Restaurant.objects.filter(owner=user).exists():
             raise serializers.ValidationError("شما قبلاً یک رستوران ثبت کرده‌اید.")
         return data
+    
+class SimpleRestaurantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Restaurant
+        fields = ['id', 'name']
